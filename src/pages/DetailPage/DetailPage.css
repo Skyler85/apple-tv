@@ -1,26 +1,30 @@
 #detail-modal .wrapper-modal {
   position: fixed;
   inset: 0px;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
+  align-items: center;
 }
-.modal {
+#detail-modal .modal {
   position: relative;
-  min-width: 768px;
-  max-width: 800px;
+  max-width: 600px;
+  max-height: 600px;
   background-color: #111;
   overflow: hidden;
   border-radius: 8px;
   transition: all 400ms ease-in-out 2s;
   animation: fadeIn 400ms;
+  overflow-y: auto;
+  scrollbar-color: rgba(255,255,255,0.3) rgba(0, 0,0,0);
 }
 
-.modal__poster-img {
+
+#detail-modal .modal__poster-img {
   height: auto;
 }
 
-.modal-close {
+#detail-modal .modal-close {
   position: absolute;
   right: 20px;
   top: 20px;
@@ -28,21 +32,21 @@
   z-index: 1000;
   counter-reset: white;
 }
-.modal__content {
+#detail-modal .modal__content {
   padding: 40px;
 }
 
-.modal__title {
+#detail-modal .modal__title {
   padding: 0;
   font-size: 40px;
   max-width: 16px 0;
 }
 
-.modal__details {
+#detail-modal .modal__details {
   font-weight: 600;
   font-size: 18px;
 }
-.modal__overview {
+#detail-modal .modal__overview {
   font-size: 20px;
   line-height: 1.5;
 }
@@ -53,26 +57,37 @@
 }
 
 @media screen and (max-height: 768px) {
-  .wrapper-modal{
+  #detail-modal .wrapper-modal{
       align-items: unset;
       padding-top: 2rem;
   }
-  .modal {
+  #detail-modal .modal {
       overflow-y: scroll;
   }
 }
 @media screen and (max-width: 768px) {
-  .modal__overview{
+  #detail-modal .modal__overview{
       font-size: 16px;
   }
-  .modal__details {
+  #detail-modal .modal__details {
       font-size: 16px;
   }
-  .wrapper-modal {
+  #detail-modal .wrapper-modal {
       padding: 0;
   }
-  .modal {
-    width: 100%;
+  #detail-modal .modal {
+    width: 90%;
       overflow-y: scroll !important;
   }
+  #detail-modal .modal__title {
+    font-size: 32px;
+  }
+  #detail-modal .modal__details {
+  font-weight: 600;
+  font-size: 12px;
+}
+#detail-modal .modal__overview {
+  font-size: 14px;
+  line-height: 1.2;
+}
 }

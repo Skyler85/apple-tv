@@ -2,13 +2,15 @@
     width: 100%;
     text-align: center;
     padding: 5rem 0;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .movie {
     flex: 1 1 auto;
     display: inline-block;
     padding-right: 0.5rem;
-    padding-bottom: 7rem;
+    padding-bottom: 5rem;
 }
 
 .movie__column-poster {
@@ -34,3 +36,10 @@
     padding: 8rem;
 }
 
+@media screen and (max-width: 1030px) {
+    .movie {
+        padding-bottom: 2rem;
+    }
+    .movie__poster {
+    }
+}

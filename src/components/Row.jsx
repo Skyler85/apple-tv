@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 // core version + navigation, pagination modules:
 import { Swiper, SwiperSlide } from "swiper/react";
-import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
+import { A11y, Navigation, Pagination, Scrollbar } from "swiper";
 // import Swiper and modules styles
 import "swiper/css";
 import "swiper/css/navigation";
