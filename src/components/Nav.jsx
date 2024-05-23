@@ -26,11 +26,9 @@ const Nav = () => {
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                navigate("/");
-            } else if (user && pathname === "/") {
+            if (user && (pathname === "/" || pathname === "/signup")) {
                 navigate("/main");
-            }
+            } 
         });
     }, [auth, navigate, pathname]);
 
@@ -60,6 +58,7 @@ const Nav = () => {
         signOut(auth).then(() => {
             setUserData({})
             localStorage.removeItem('userData');
+            navigate("/")
         }).catch((error) => {
             alert(error.message);
         })
