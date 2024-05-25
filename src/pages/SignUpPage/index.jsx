@@ -1,34 +1,67 @@
 import styled from "styled-components";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useContext, useState } from "react";
+import { UserContext } from "../../context/UserContext";
+import env from 'react-dotenv';
 
 const SignUpPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [nickname, setNickname] = useState("");
-    const [avatar, setAvatar] = useState(null);
+    const [displayName, setDisplayName] = useState("");
+    const [photoURL, setPhotoURL] = useState("https://res.cloudinary.com/dmovvyvc5/image/upload/v1714975336/user-2517433_640_kwvoai.png");
+    
 
-    const handleSignUp = (e) => {
+    const { setUser, auth, logout } = useContext(UserContext)
+
+    const handleSignUp = async (e) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
             return console.log("Passwords do not match.");
         }
-
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log(userCredential)
-                // Signed in
-                const user = userCredential.user;
-                
-                // Additional user setup can be done here
+        
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const user = userCredential.user;
+            await updateProfile( user,{
+                displayName,
+                photoURL,
             })
-            .catch((error) => {
-                return console.log(error);
-            });
+
+            setUser(user);
+
+            logout()
+
+        } catch (error) {
+            console.log(error)
+        }
     };
+    const handleImageUpload = async (e) => {
+        if (e.target.files.length > 0) {
+            const file = e.target.files[0]
+            console.log(file)
+            const formData = new FormData();
+            formData.append("file", file)
+            formData.append("upload_preset", "apple_tv_avatar")
+
+            try {
+                const res = await fetch(`https://api.cloudinary.com/v1_1/${env.IMG_CLOUD_NAME}/upload`, {
+                    method: "POST",
+                    body: formData,
+                })
+                const data = await res.json()
+                setPhotoURL(data.secure_url)
+                console.log(data)
+                console.log(data.secure_url)
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            console.error("No file selected")
+        }
+
+    }
 
     return (
         <Container>
@@ -65,8 +98,8 @@ const SignUpPage = () => {
                         type='text'
                         id='nickname'
                         required='required'
-                        value={nickname}
-                        onChange={(e) => setNickname(e.target.value)}
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
                     />
                 </Label>
                 <Label>
@@ -74,10 +107,12 @@ const SignUpPage = () => {
                     <input
                         style={{ display: "block", width: "210px" }}
                         type='file'
-                        id='avatar'
+                        id='photoURL'
+                        required='required'
                         accept='image/*'
-                        onChange={(e) => setAvatar(e.target.files[0])}
+                        onChange={handleImageUpload}
                     />
+                    {/* {photoURL && <Image cloudName={env.IMG_CLOUD_NAME} publicId={photoURL} width="100" />} */}
                 </Label>
 
                 <Button onClick={handleSignUp}>Sign Up</Button>
@@ -140,4 +175,4 @@ const InputText = styled.input`
     display: block;
     color: #fff;
 `;
-export default SignUpPage;
+export default SignUpPage

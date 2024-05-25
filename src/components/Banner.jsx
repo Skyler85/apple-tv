@@ -16,12 +16,10 @@ const Banner = () => {
         const response = await axios.get(request.fetchNowPlaying);
         // 여러 영화 중 영화 하나의 ID를 가져오기
         const movieId = await response.data.results[Math.floor(Math.random() * response.data.results.length)].id;
-        console.log(movieId);
         // 특정 영화의 더 상세한 정보를 가져오기 (비디오 정보 포함)
         const { data: movieDetail } = await axios.get(`movie/${movieId}`, { params: { append_to_response: "videos" } });
         setMovie(movieDetail);
     };
-    console.log(isClicked);
     const truncate = (str, n) => {
         return str?.length > n ? str.substr(0, n) + " ..." : str;
     };

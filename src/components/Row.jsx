@@ -27,7 +27,6 @@ const Row = ({ title, id, fetchUrl }) => {
     const fetchMovieData = useCallback(async () => {
         const response = await axios.get(fetchUrl);
         setMovies(response.data.results);
-        console.log(response.data.results);
     }, [fetchUrl]);
 
     useEffect(() => {
@@ -60,7 +59,7 @@ const Row = ({ title, id, fetchUrl }) => {
                 navigation
                 pagination={{ clickable: true }}
                 scrollbar={{ draggable: true }}
-                onSwiper={(swiper) => console.log(swiper)}
+                onSwiper={() => {}}
                 onSlideChange={() => console.log('slide change')}>
                 <div id={id} className='row__posters'>
                     {movies.map((movie) => (

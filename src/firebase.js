@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { GoogleAuthProvider, getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,6 +16,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app) // auth 모듈 초기화
+
+export const googleProvider = new GoogleAuthProvider();
 
 export const actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
@@ -32,5 +36,5 @@ export const actionCodeSettings = {
   // },
   // dynamicLinkDomain: 'example.page.link'
 };
-console.log('conneted firebase ✅')
-export default app;
+console.log('connected firebase ✅')
+export { app, auth };

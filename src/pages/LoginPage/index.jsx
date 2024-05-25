@@ -1,35 +1,44 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import app from "../../firebase";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { AiTwotoneMail } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
+import { UserContext } from "../../context/UserContext";
 
-const initialUserEmail = localStorage.getItem("emailForSignIn") ? JSON.parse(localStorage.getItem("emailForSignIn")) : "";
+
 const LoginPage = () => {
-    const [email, setEmail] = useState(initialUserEmail);
-    const [password, setPassword] = useState('')
-    const auth = getAuth(app);
+    const { login, auth } = useContext(UserContext)
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('')
+
+    // 이메일 패스워드 로그인 핸들러
     const handleAuthEmail = (e) => {
         e.preventDefault();
-        
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed in
-                    console.log(userCredential);
-                    const user = userCredential.user;
-                    localStorage.setItem('userData', JSON.stringify(user.accessToken));
-                    // ...
-                })
-                .catch((error) => {
-                    const errorMessage = error.message;
-                    console.log(errorMessage);
-                    alert(`이메일 또는 패스워드를 확인하세요`);
-                });
+                
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            login(userCredential.user)
+        })
+        .catch((error) => {
+            const errorMessage = error.message;
+            console.log(errorMessage);
+            alert(`이메일 또는 패스워드를 확인하세요`);
+        });
+
     };
 
+    // 구글 로그인 핸들러
+    const provider = new GoogleAuthProvider();
+    const handleAuth = () => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                login(result.user)
+            })
+            .catch((error) => alert(error.message));
+    };
     const loginApiIcons = {
         display: "flex",
         justifyContent: "spaceBetween",
@@ -63,7 +72,7 @@ const LoginPage = () => {
 
                 <Icons style={loginApiIcons}>
                     <AiTwotoneMail color='white' fontSize='2rem' />
-                    <FcGoogle fontSize='2rem' />
+                    <FcGoogle onClick={handleAuth} fontSize='2rem' />
                     <FaApple color='white' fontSize='2rem' />
                 </Icons>
             </Center>
